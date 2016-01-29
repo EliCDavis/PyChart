@@ -29,11 +29,7 @@ class Chart:
 
         return self._labels
 
-    def add_data_entry(self, data, label):
-
-        self.add_data_entry(data, label, "DEFAULT")
-
-    def add_data_entry(self, data, label, data_set):
+    def add_data_entry(self, data, label, data_set="DEFAULT"):
 
         if label not in self._data_entries.keys():
 
