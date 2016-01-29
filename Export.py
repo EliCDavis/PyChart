@@ -1,5 +1,4 @@
 import Chart
-import jsonpickle
 
 
 def export_charts(title, desc, charts):
@@ -111,14 +110,6 @@ def write_chart_script(chart):
 
 
     return script
-
-
-def get_chart_json(chart):
-
-    json = '{'\
-           '}'
-
-    return json
 
 # charts = []
 # export()
