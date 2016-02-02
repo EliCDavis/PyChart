@@ -1,4 +1,3 @@
-from ChartConfiguration import ChartConfiguration
 import operator
 
 
@@ -8,32 +7,25 @@ class Chart:
 
         self._name = name
 
-        self._chart_type = ""
+        self._chart_type = "Line"
 
-        # Initialize the dictionary for storing data
         self._data_entries = {}
 
-        self._configuration = ChartConfiguration('blue')
-
         self._all_data_sets = []
+
+        self._label_entry_order = {}
 
     def get_name(self):
 
         return self._name
-
-    def get_data(self):
-
-        return self._data
-
-    def get_labels(self):
-
-        return self._labels
 
     def add_data_entry(self, data, label, data_set="DEFAULT"):
 
         if label not in self._data_entries.keys():
 
             self._data_entries[str(label)] = {}
+
+            self._label_entry_order[str(label)] = len(self._label_entry_order)
 
         self._data_entries[str(label)][str(data_set)] = float(data)
 
@@ -47,27 +39,27 @@ class Chart:
 
     def get_data_labels(self):
 
-        labels = []
+        labels = [None]*len(self._data_entries.keys())
 
         for label in self._data_entries.keys():
 
-            labels.append(label)
+            labels[self._label_entry_order[label]] = label
 
         return labels
 
     def get_all_data_from_set(self, data_set):
 
-        data = []
+        data = [None]*len(self._data_entries.keys())
 
         for x in self._data_entries.keys():
 
             if self._data_entries[x][data_set] is None:
 
-                data.append(0);
+                data[self._label_entry_order[x]] = 0
 
             else:
 
-                data.append(self._data_entries[x][data_set])
+                data[self._label_entry_order[x]] = self._data_entries[x][data_set]
 
         return data
 
@@ -106,8 +98,6 @@ class Chart:
 
                 data.append(0)
 
-        print(data)
-
         return data
 
     def sorted_dict(self):
@@ -115,3 +105,28 @@ class Chart:
         sort1 = sorted(self._data_entries.items(), key=operator.itemgetter(0))
 
         return sorted(sort1, key=lambda x: float(x[0]))
+
+    def set_chart_type(self, type_of_chart):
+
+        self._chart_type = type_of_chart
+
+    def get_chart_type(self):
+
+        return self._chart_type
+
+    def can_sort_data_numerically(self):
+
+        for l in self.get_data_labels():
+
+            if self.is_number(l) is False:
+
+                return False
+
+        return True
+
+    def is_number(self, s):
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
