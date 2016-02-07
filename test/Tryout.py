@@ -22,11 +22,16 @@ for i in range(33):
     powChart.add_data_entry(math.pow(2, i), i, 'Powers Of Two')
 
 
-# Create a chart showcasing some log values
-logChart = Chart('Log values')
+# Create a chart showcasing the radar chart
+weatherChart = Chart('Likelihood of Weather Tomorrow')
 
-for i in range(20):
-    logChart.add_data_entry(math.log10(i+1), i+1, "Log Values")
+weatherChart.add_data_entry(58, "Cloudy")
+weatherChart.add_data_entry(30, "Rain")
+weatherChart.add_data_entry(4, "Thunderstorms")
+weatherChart.add_data_entry(42, "Sunny")
+weatherChart.add_data_entry(1, "Snow")
+
+weatherChart.set_chart_type("Radar")
 
 
 # Create example pie chart
@@ -78,4 +83,4 @@ description = "<div class='well'><h4>Create beautiful charts in just a few lines
 
 
 # Finally export the chart we have created
-export_charts(title, description, [trigChart, powChart, logChart, howMuchYouLikeThisChart, popularity])
+export_charts(title, description, [trigChart, powChart, weatherChart, howMuchYouLikeThisChart, popularity])

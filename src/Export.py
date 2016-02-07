@@ -3,7 +3,7 @@ from src.ColorSelector import ColorSelector
 
 def export_charts(title, desc, charts):
 
-    file = open('exports/workfile.html', 'w')
+    file = open('workfile.html', 'w')
 
     file.write('<html>')
 
@@ -25,18 +25,32 @@ def export_charts(title, desc, charts):
 
         if i == 0:
 
-            file.write("<div class='col-md-12'>"+create_chart_div(charts[i])+"</div>")
+            file.write("<div class='col-md-12'>"+create_chart_div(charts[i], i)+"</div>")
 
         else:
 
-            file.write("<div class='col-md-6'>"+create_chart_div(charts[i])+"</div>")
+            file.write("<div class='col-md-6'>"+create_chart_div(charts[i], i)+"</div>")
 
     file.write('</div></div>')
 
     file.write('<script>correctAllGraphs()</script>')
 
-    for chart in charts:
-        file.write(write_chart_script(chart))
+    for i in range(len(charts)):
+        file.write(write_chart_script(charts[i], i))
+
+    file.write('<script> allData = [')
+
+    for i in range(len(charts)):
+        file.write('data'+str(i))
+
+        if i < len(charts) -1:
+            file.write(',')
+
+    file.write('];createCompleteDownload()</script>')
+
+    file.write('<br/><br/><br/>')
+
+    file.write(write_footer())
 
     file.write('</div>')
 
@@ -53,43 +67,44 @@ def get_header():
              '  <script src="dependencies/Helper.js"></script>'\
              '  <link href="dependencies/bootstrap/css/bootstrap.css" rel="stylesheet">' \
              '  <script src="dependencies/Chart.min.js"></script>' \
+             '  <script src="dependencies/papaparse.min.js"></script>'\
              '<head>'
 
     return header
 
 
-def create_chart_div(chart):
+def create_chart_div(chart, index):
 
     div = '<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">'
     div += chart.get_name() + '</h3></div><div class="panel-body">'
-    div += '<canvas class="pychart" id="' + chart.get_name() + '" width="100%" height="400"></canvas>'
+    div += '<canvas class="pychart" id="c' +str(index) + '" width="100%" height="400"></canvas>'
     div += '</div></div>'
 
     return div
 
 
-def write_chart_script(chart):
+def write_chart_script(chart, index):
 
     script = '\n<script>\n'
 
-    script += 'var chartref = document.getElementById("'+chart.get_name()+'");\n'
+    script += 'var chartref = document.getElementById("c'+str(index)+'");\n'
 
-    if chart.get_chart_type() == "Line" or chart.get_chart_type() == "Bar":
-        script += write_line_chart_data(chart)
+    if chart.get_chart_type() == "Line" or chart.get_chart_type() == "Bar" or chart.get_chart_type() == "Radar":
+        script += write_line_chart_data(chart, index)
 
     if chart.get_chart_type() == "Pie":
-        script += write_pie_chart_data(chart)
+        script += write_pie_chart_data(chart, index)
 
     script += '\n</script>\n'
 
     return script
 
 
-def write_pie_chart_data(chart):
+def write_pie_chart_data(chart, index):
 
     selector = ColorSelector()
 
-    script = "var data = ["
+    script = "var data"+str(index)+" = ["
 
     for i in range(len(chart.get_all_data_from_set(chart.get_data_sets()[0]))):
 
@@ -104,12 +119,12 @@ def write_pie_chart_data(chart):
 
     script += "];\n"
 
-    script += 'var myPieChart = new Chart(chartref.getContext("2d")).Pie(data);'
+    script += 'var myPieChart = new Chart(chartref.getContext("2d")).Pie(data'+str(index)+');'
 
     return script
 
 
-def write_line_chart_data(chart):
+def write_line_chart_data(chart, index):
 
     """
 
@@ -121,7 +136,7 @@ def write_line_chart_data(chart):
     selector = ColorSelector()
 
     # Variable declaration that stores chart info
-    script = "var data = {\n"
+    script = "var data"+str(index)+" = {\n"
 
     # get correct labels
     labels = []
@@ -164,9 +179,23 @@ def write_line_chart_data(chart):
     script += "]};\n"
 
     if chart.get_chart_type() == "Line":
-        script += "var myLineChart = new Chart(chartref.getContext('2d')).Line(data);\n"
+        script += "var myLineChart = new Chart(chartref.getContext('2d')).Line(data"+str(index)+");\n"
 
     elif chart.get_chart_type() == "Bar":
-        script += "var myBarChart = new Chart(chartref.getContext('2d')).Bar(data);\n"
+        script += "var myBarChart = new Chart(chartref.getContext('2d')).Bar(data"+str(index)+");\n"
+
+    elif chart.get_chart_type() == "Radar":
+        script += "var myRadarChart = new Chart(chartref.getContext('2d')).Radar(data"+str(index)+");\n"
 
     return script
+
+
+def write_footer():
+
+    footer = '<nav class="navbar navbar-default navbar-fixed-bottom">'\
+             '<div class="container-fluid">'\
+             '<p class="text-center" style="margin-top:10px" > <a href="#" onclick="allDownload()" class="navbar-link">Download</a></p>'\
+             '</div>'\
+             '</nav>'
+
+    return footer
