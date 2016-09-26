@@ -1,7 +1,6 @@
 import math
 
 from src.Chart import Chart
-
 from src.Export import export_charts
 
 # Create a chart showcasing trig function
@@ -66,7 +65,7 @@ popularity.add_data_entry(230, "June", "Others")
 popularity.set_chart_type("Bar")
 
 # Create a title for our page
-title = "<h1>PyChart <br/><small>Combining the powers of Python and Chart.js</small></h1>"
+title = "<h1>PyChart <br/><small>Combining the powers of Python and Chart.bootstrap</small></h1>"
 
 # Create a description for our page
 description = "<div class='well'><h4>Create beautiful charts in just a few lines of Python</h4>"\
@@ -83,4 +82,5 @@ description = "<div class='well'><h4>Create beautiful charts in just a few lines
 
 
 # Finally export the chart we have created
-export_charts(title, description, [trigChart, powChart, weatherChart, howMuchYouLikeThisChart, popularity])
+file = open('demo.html', 'w')
+file.write(export_charts(title, description, [trigChart, powChart, weatherChart, howMuchYouLikeThisChart, popularity]))

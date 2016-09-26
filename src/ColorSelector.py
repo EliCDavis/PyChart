@@ -1,7 +1,6 @@
 import math
 import random
 
-
 class ColorSelector:
 
     def __init__(self):

@@ -1,0 +1,31 @@
+{
+  "name": "pychart",
+  "version": "1.0.0",
+  "description": "Build Charts in Python",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EliCDavis/PyChart.git"
+  },
+  "keywords": [
+    "Python",
+    "Chart"
+  ],
+  "author": "Eli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EliCDavis/PyChart/issues"
+  },
+  "homepage": "https://github.com/EliCDavis/PyChart#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^2.0.0"
+  }
+}

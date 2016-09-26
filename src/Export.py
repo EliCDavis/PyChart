@@ -1,74 +1,79 @@
 from src.Chart import Chart
 from src.ColorSelector import ColorSelector
+import os
 
 def export_charts(title, desc, charts):
 
-    file = open('workfile.html', 'w')
+    export = ''
 
-    file.write('<html>')
+    export += '<html>'
 
-    file.write(get_header())
+    export += get_header()
 
-    file.write('<br/><div class="container">')
+    export += '<br/><div class="container">'
 
-    file.write('<div class="row">')
+    export += '<div class="row">'
 
-    file.write('<div class="col-md-6"><div class="jumbotron">' + title + '</div></div>')
+    export += '<div class="col-md-6"><div class="jumbotron">' + title + '</div></div>'
 
-    file.write('<div class="col-md-6">'+desc+'</div>')
+    export += '<div class="col-md-6">'+desc+'</div>'
 
-    file.write('</div><div class="row">')
+    export += '</div><div class="row">'
 
-    file.write('<div id="ALL_CHARTS">')
+    export += '<div id="ALL_CHARTS">'
 
     for i in range(len(charts)):
 
         if i == 0:
 
-            file.write("<div class='col-md-12'>"+create_chart_div(charts[i], i)+"</div>")
+            export += "<div class='col-md-12'>"+create_chart_div(charts[i], i)+"</div>"
 
         else:
 
-            file.write("<div class='col-md-6'>"+create_chart_div(charts[i], i)+"</div>")
+            export += "<div class='col-md-6'>"+create_chart_div(charts[i], i)+"</div>"
 
-    file.write('</div></div>')
+    export += '</div></div>'
 
-    file.write('<script>correctAllGraphs()</script>')
-
-    for i in range(len(charts)):
-        file.write(write_chart_script(charts[i], i))
-
-    file.write('<script> allData = [')
+    export += '<script>correctAllGraphs()</script>'
 
     for i in range(len(charts)):
-        file.write('data'+str(i))
+        export += write_chart_script(charts[i], i)
+
+    export += '<script> allData = ['
+
+    for i in range(len(charts)):
+        export += 'data'+str(i)
 
         if i < len(charts) -1:
-            file.write(',')
+            export += ','
 
-    file.write('];createCompleteDownload()</script>')
+    export += '];createCompleteDownload()</script>'
 
-    file.write('<br/><br/><br/>')
+    export += '<br/><br/><br/>'
 
-    file.write(write_footer())
+    export += write_footer()
 
-    file.write('</div>')
+    export += '</div>'
 
-    file.write('</html>')
+    export += '</html>'
+
+    return export
 
 
 def get_header():
 
-    header = '<head>' \
-             '  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>' \
-             '  <script src="dependencies/bootstrap/js/bootstrap.min.js"></script>' \
-             '  <script src="dependencies/dragula/dragula.min.js"></script>'\
-             '  <link href="dependencies/dragula/dragula.min.css" rel="stylesheet">'\
-             '  <script src="dependencies/Helper.js"></script>'\
-             '  <link href="dependencies/bootstrap/css/bootstrap.css" rel="stylesheet">' \
-             '  <script src="dependencies/Chart.min.js"></script>' \
-             '  <script src="dependencies/papaparse.min.js"></script>'\
-             '<head>'
+    __location__ = os.path.realpath(
+        os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+    scripts = open(os.path.join(__location__, 'script.js'), 'r')
+    styles = open(os.path.join(__location__, 'style.css'), 'r')
+    helper = open(os.path.join(__location__, 'helper.js'), 'r')
+
+    header = '<head>'
+    header += '<script>' + scripts.read().replace('\n', '') + '</script>'
+    header += '<script>' + helper.read() + '</script>'
+    header += '<style>' + styles.read().replace('\n', '') + '</style>'
+    header += '</head>'
 
     return header
 
