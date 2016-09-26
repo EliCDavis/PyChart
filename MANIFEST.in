@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+src/Chart.py
+src/ColorSelector.py
+src/Export.py
+src/__init__.py
+src/helper.js
+src/script.js
+src/style.css
